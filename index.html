@@ -105,6 +105,27 @@
   .datenstand {
     font-size: 13px; color: #9a9486; margin-top: 8px;
   }
+
+  /* --- Mobil-Anpassungen: greifen nur auf schmalen Bildschirmen,
+         am Desktop-Verhalten ändert sich nichts. --- */
+  @media (max-width: 600px) {
+    body { padding: 16px 10px; }
+    h1 { font-size: 23px; }
+    .untertitel { font-size: 16px; }
+    .intro { font-size: 16px; }
+    .block { padding: 16px 14px; }
+    .block h2 { font-size: 18px; }
+    /* Größere Tippfläche für Ankreuz- und Auswahloptionen */
+    .option {
+      padding: 11px 0; font-size: 16px;
+      min-height: 44px; align-items: center;
+    }
+    .option input { width: 22px; height: 22px; margin-top: 0; }
+    /* Absende-Knopf gut erreichbar */
+    button { padding: 16px 24px; }
+    /* eingerückte Unterpunkte auf schmalem Display weniger einrücken */
+    .unterpunkte { margin-left: 16px; padding-left: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -365,7 +386,7 @@
    SAITENBERATER – Formularlogik
    =================================================================== */
 
-var APP_VERSION = "Saitenberater Stand 2026-05-26 (mit Versand)";
+var APP_VERSION = "Saitenberater Stand 2026-05-27 (mit Versand, mobil)";
 
 /* --- Saitensätze je Hersteller ---
    Gespeist aus der Saitenfinder-Datenbank, für den Berater auf die
