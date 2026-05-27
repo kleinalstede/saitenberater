@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saitenberater – Streicherwelt</title>
+<style>
+  :root {
+    --gold:   #b8893a;
+    --gold-d: #936a26;
+    --ink:    #2e2a24;
+    --paper:  #fbf8f2;
+    --line:   #e4dccb;
+    --soft:   #f3ede0;
+    --kritik: #a05a3a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+
+  h1 {
+    font-size: 26px; font-weight: 600; color: var(--gold-d);
+    margin-bottom: 6px;
+  }
+  .untertitel {
+    font-size: 17px; font-style: italic; color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .intro { font-size: 17px; margin-bottom: 24px; }
+
+  .block {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 8px; padding: 20px; margin-bottom: 16px;
+  }
+  .block h2 {
+    font-size: 19px; font-weight: 600; color: var(--gold-d);
+    margin-bottom: 4px;
+  }
+  .block .hint { font-size: 15px; color: #6b6356; margin-bottom: 14px; }
+
+  .frage { margin-bottom: 18px; }
+  .frage:last-child { margin-bottom: 0; }
+  .frage > label.feldname {
+    display: block; font-size: 16px; font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  select, input[type="text"], textarea {
+    width: 100%; font-size: 17px; font-family: inherit;
+    padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 6px; background: var(--soft); color: var(--ink);
+  }
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* Ankreuz- und Auswahloptionen */
+  .option {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0; font-size: 16px; cursor: pointer;
+  }
+  .option input { margin-top: 4px; flex-shrink: 0;
+    width: 18px; height: 18px; }
+
+  .gruppe-titel {
+    font-size: 15px; font-weight: 600; color: var(--gold-d);
+    margin: 12px 0 4px;
+  }
+  .gruppe-titel.kritik { color: var(--kritik); }
+
+  /* aufklappbare Bereiche */
+  .versteckt { display: none; }
+
+  .unterpunkte {
+    margin-left: 28px; padding-left: 14px;
+    border-left: 2px solid var(--line);
+  }
+
+  .hinweisbox {
+    background: var(--soft); border-left: 3px solid var(--gold);
+    border-radius: 4px; padding: 12px 14px; margin: 12px 0;
+    font-size: 15px; color: #6b6356;
+  }
+
+  button {
+    font-family: inherit; font-size: 18px; font-weight: 600;
+    background: var(--gold); color: #fff; border: none;
+    padding: 14px 24px; border-radius: 6px; cursor: pointer;
+    width: 100%;
+  }
+  button:hover { background: var(--gold-d); }
+
+  .pflicht-hinweis {
+    font-size: 14px; color: var(--kritik);
+    margin-top: 8px; display: none;
+  }
+  .disclaimer {
+    font-size: 14px; color: #6b6356; margin-top: 18px;
+    border-top: 1px solid var(--line); padding-top: 14px;
+  }
+  .datenstand {
+    font-size: 13px; color: #9a9486; margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Saitenberater</h1>
+  <p class="untertitel">Persönliche Saitenberatung von Streicherwelt</p>
+  <p class="intro">
+    Sie suchen die passenden Saiten für Ihre Geige? Beschreiben Sie uns
+    in wenigen Schritten Ihr Instrument, Ihr Spiel und Ihre
+    Klangvorstellung. Wir werten Ihre Angaben persönlich aus und melden
+    uns mit einer individuellen Empfehlung bei Ihnen.
+  </p>
+
+  <!-- ===== BLOCK 1 – ÜBER SIE ===== -->
+  <div class="block">
+    <h2>1. Über Sie</h2>
+    <p class="hint">Damit wir die Empfehlung auf Ihr Spiel abstimmen.</p>
+
+    <div class="frage">
+      <label class="feldname" for="koennen">Wie schätzen Sie Ihr
+        Spielniveau ein?</label>
+      <select id="koennen">
+        <option value="">– bitte wählen –</option>
+        <option value="Anfänger (1. Lage)">Anfänger (1. Lage)</option>
+        <option value="Fortgeschritten (Lagenspiel, Bogentechniken)">Fortgeschritten (Lagenspiel, Bogentechniken)</option>
+        <option value="Erfahrener Amateur">Erfahrener Amateur</option>
+        <option value="Semi-Profi">Semi-Profi</option>
+      </select>
+    </div>
+
+    <div class="frage">
+      <label class="feldname">In welchem Rahmen spielen Sie?
+        <span style="font-weight:400; color:#6b6356;">(Mehrfachauswahl
+        möglich)</span></label>
+      <label class="option"><input type="checkbox" name="rahmen" value="Hobby / für mich">Hobby / für mich</label>
+      <label class="option"><input type="checkbox" name="rahmen" value="Unterricht">Unterricht</label>
+      <label class="option"><input type="checkbox" name="rahmen" value="Orchester">Orchester</label>
+      <label class="option"><input type="checkbox" name="rahmen" value="Kammermusik">Kammermusik</label>
+    </div>
+  </div>
+
+  <!-- ===== BLOCK 2 – AKTUELLE SAITEN ===== -->
+  <div class="block">
+    <h2>2. Ihre aktuellen Saiten</h2>
+    <p class="hint">Welche Saiten spielen Sie derzeit?</p>
+
+    <div class="frage">
+      <label class="feldname" for="hersteller">Hersteller</label>
+      <select id="hersteller">
+        <option value="">– bitte wählen –</option>
+        <option value="Pirastro">Pirastro</option>
+        <option value="Thomastik">Thomastik</option>
+        <option value="Larsen">Larsen</option>
+        <option value="Jargar">Jargar</option>
+        <option value="Andere">Andere</option>
+      </select>
+    </div>
+
+    <div class="frage versteckt" id="frage-hersteller-andere">
+      <label class="feldname" for="hersteller-andere">Welcher
+        Hersteller?</label>
+      <input type="text" id="hersteller-andere"
+             placeholder="Herstellername">
+    </div>
+
+    <div class="frage">
+      <label class="feldname" for="saitenname">Saitensatz</label>
+      <select id="saitenname">
+        <option value="">– bitte zuerst Hersteller wählen –</option>
+      </select>
+    </div>
+
+    <div class="frage versteckt" id="frage-saitenname-andere">
+      <label class="feldname" for="saitenname-andere">Welcher
+        Saitensatz?</label>
+      <input type="text" id="saitenname-andere"
+             placeholder="Name des Saitensatzes">
+    </div>
+
+    <div class="frage">
+      <label class="option">
+        <input type="checkbox" id="gemischt-check">
+        Ich spiele eine gemischte Besaitung
+        (nicht alle Saiten vom selben Satz)
+      </label>
+      <div class="frage versteckt" id="frage-gemischt"
+           style="margin-top:10px;">
+        <label class="feldname" for="gemischt-text">Welche Saiten
+          weichen ab?</label>
+        <textarea id="gemischt-text"
+          placeholder="z. B.: E-Saite Larsen Tzigane, übrige Saiten wie oben"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BLOCK 3 – BOGEN ===== -->
+  <div class="block">
+    <h2>3. Ihr Bogen</h2>
+    <p class="hint">Auch der Bogen beeinflusst Klang und Ansprache.</p>
+
+    <div class="frage">
+      <label class="feldname">Material</label>
+      <label class="option"><input type="radio" name="bogen" value="Holz">Holz</label>
+      <label class="option"><input type="radio" name="bogen" value="Carbon">Carbon</label>
+    </div>
+
+    <div class="frage">
+      <label class="feldname" for="bogen-text">Zusätzliche Angaben
+        <span style="font-weight:400; color:#6b6356;">(optional)</span></label>
+      <textarea id="bogen-text"
+        placeholder="z. B. Hersteller, Holzart, Gewicht, Spielgefühl"></textarea>
+    </div>
+  </div>
+
+  <!-- ===== BLOCK 4 – JETZIGER KLANG ===== -->
+  <div class="block">
+    <h2>4. So klingt Ihre Geige jetzt</h2>
+    <p class="hint">Welche Eigenschaften treffen auf den aktuellen
+      Klang zu? Mehrfachauswahl möglich.</p>
+
+    <div class="frage">
+      <div class="gruppe-titel">Eher angenehme Eigenschaften</div>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="klar">klar</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="ausgeglichen">ausgeglichen</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="brillant">brillant</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="warm">warm</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="breit">breit</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="fokussiert">fokussiert</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="präzise">präzise</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="kräftig">kräftig</label>
+
+      <div class="gruppe-titel">Wertneutrale Eigenschaften</div>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="dunkel">dunkel</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="hell">hell</label>
+
+      <div class="gruppe-titel kritik">Eher störende Eigenschaften</div>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="laut">laut</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="schwach">schwach</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="dumpf">dumpf</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="hohl">hohl</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="schreiend">schreiend</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="quäkend">quäkend</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="schrill">schrill</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="unpräzise">unpräzise</label>
+      <label class="option"><input type="checkbox" name="klang-jetzt" value="unausgeglichen">unausgeglichen</label>
+    </div>
+  </div>
+
+  <!-- ===== BLOCK 5 – VERBESSERUNGSWÜNSCHE ===== -->
+  <div class="block">
+    <h2>5. Was wünschen Sie sich?</h2>
+    <p class="hint">Wie zufrieden sind Sie mit dem aktuellen Klang?</p>
+
+    <div class="frage">
+      <label class="option"><input type="radio" name="zufrieden" value="Ideal für mich">Ideal für mich</label>
+      <label class="option"><input type="radio" name="zufrieden" value="Mittel, könnte besser sein">Mittel, könnte besser sein</label>
+      <label class="option"><input type="radio" name="zufrieden" value="Bin unzufrieden">Bin unzufrieden</label>
+    </div>
+
+    <!-- Antwort: ideal -->
+    <div class="hinweisbox versteckt" id="box-ideal">
+      Schön, dass Ihre Geige Sie klanglich überzeugt. Dann ist unsere
+      Empfehlung einfach: Bleiben Sie bei Ihrem bewährten Saitensatz
+      und ziehen Sie ihn wieder auf, wenn die Saiten ihre besten Tage
+      hinter sich haben. Gern dürfen Sie das Formular trotzdem
+      absenden – wir bestätigen Ihnen Ihren Satz und beraten Sie bei
+      Fragen.
+    </div>
+
+    <!-- Antwort: unzufrieden – Hinweistext -->
+    <div class="hinweisbox versteckt" id="box-unzufrieden">
+      Ein Hinweis vorab: Mit der Wahl der Saiten lässt sich der Klang
+      Ihrer Geige spürbar beeinflussen – in Nuancen, in der Ansprache,
+      in der Balance. Den grundlegenden Klangcharakter eines
+      Instruments verändern Saiten jedoch nicht; dieser ist im
+      Instrument selbst angelegt, unabhängig von seinem Wert. Wir
+      beraten Sie gern und ehrlich, was in Ihrem Fall erreichbar ist –
+      und sagen Ihnen auch, wenn Ihre Klangvorstellung eher in einer
+      anderen Richtung als bei den Saiten zu suchen ist.
+    </div>
+
+    <!-- Verbesserungs-Fragenblock: bei "mittel" und "unzufrieden" -->
+    <div class="versteckt" id="verbesserung">
+      <p class="hint" style="margin-top:14px;">Was soll sich
+        verbessern? Mehrfachauswahl möglich – bitte mindestens einen
+        Punkt wählen.</p>
+
+      <!-- Klang -->
+      <label class="option"><input type="checkbox" class="oberkat" data-ziel="unter-klang" value="Klang"><strong>Klang</strong></label>
+      <div class="unterpunkte versteckt" id="unter-klang">
+        <label class="option"><input type="checkbox" name="verb-klang" value="Höhen stärken">Höhen stärken</label>
+        <label class="option"><input type="checkbox" name="verb-klang" value="Bass erwärmen">Bass erwärmen</label>
+        <label class="option"><input type="checkbox" name="verb-klang" value="mehr Ausgeglichenheit beim Saitenwechsel">mehr Ausgeglichenheit beim Saitenwechsel</label>
+      </div>
+
+      <!-- Ansprache -->
+      <label class="option"><input type="checkbox" class="oberkat" data-ziel="unter-ansprache" value="Ansprache"><strong>Ansprache</strong></label>
+      <div class="unterpunkte versteckt" id="unter-ansprache">
+        <label class="option"><input type="checkbox" name="verb-ansprache" value="in allen Lagen">in allen Lagen</label>
+        <label class="option"><input type="checkbox" name="verb-ansprache" value="besonders in höheren Lagen">besonders in höheren Lagen</label>
+        <label class="option"><input type="checkbox" name="verb-ansprache" value="besonders auf den unteren Saiten">besonders auf den unteren Saiten</label>
+      </div>
+
+      <!-- Obertonreichtum (ohne Unterpunkte) -->
+      <label class="option"><input type="checkbox" name="verb-oberton" value="Obertonreichtum"><strong>Obertonreichtum</strong></label>
+
+      <!-- Volumen -->
+      <label class="option"><input type="checkbox" class="oberkat" data-ziel="unter-volumen" value="Volumen / Tragfähigkeit"><strong>Volumen / Tragfähigkeit</strong></label>
+      <div class="unterpunkte versteckt" id="unter-volumen">
+        <label class="option"><input type="checkbox" name="verb-volumen" value="auf allen Saiten">auf allen Saiten</label>
+        <label class="option"><input type="checkbox" name="verb-volumen" value="vor allem in hohen Lagen der E-Saite">vor allem in hohen Lagen der E-Saite</label>
+      </div>
+
+      <div class="frage" style="margin-top:14px;">
+        <label class="feldname" for="verb-sonstiges">Sonstiges
+          <span style="font-weight:400; color:#6b6356;">(optional)</span></label>
+        <textarea id="verb-sonstiges"
+          placeholder="Was möchten Sie sonst noch verändern?"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ABSCHLUSS – KONTAKT ===== -->
+  <div class="block">
+    <h2>6. Ihre Kontaktdaten</h2>
+    <p class="hint">Damit wir Ihnen unsere Empfehlung zusenden können.</p>
+
+    <div class="frage">
+      <label class="feldname" for="name">Name</label>
+      <input type="text" id="name" placeholder="Vor- und Nachname">
+    </div>
+    <div class="frage">
+      <label class="feldname" for="email">E-Mail-Adresse</label>
+      <input type="text" id="email" placeholder="ihre@email.de">
+    </div>
+    <div class="frage">
+      <label class="feldname" for="nachricht">Möchten Sie uns noch
+        etwas mitteilen?
+        <span style="font-weight:400; color:#6b6356;">(optional)</span></label>
+      <textarea id="nachricht"></textarea>
+    </div>
+  </div>
+
+  <button id="absenden">Anfrage absenden</button>
+  <p class="pflicht-hinweis" id="pflicht-hinweis"></p>
+
+  <p class="disclaimer">
+    Ihre Angaben werden ausschließlich zur Bearbeitung Ihrer
+    Saitenanfrage verwendet. Wir melden uns persönlich bei Ihnen.
+    <span class="datenstand" id="datenstand"></span>
+  </p>
+
+</div>
+
+<script>
+/* ===================================================================
+   SAITENBERATER – Formularlogik
+   =================================================================== */
+
+var APP_VERSION = "Saitenberater Stand 2026-05-26 (mit Versand)";
+
+/* --- Saitensätze je Hersteller ---
+   Gespeist aus der Saitenfinder-Datenbank, für den Berater auf die
+   gebräuchlichen Namen vereinfacht. "Jargar" ist noch ohne Sätze –
+   dort greift automatisch das Freitextfeld. Bei jedem Hersteller
+   steht zusätzlich "nicht aufgeführt" zur Verfügung. */
+var SAITEN_NACH_HERSTELLER = {
+  "Pirastro": [
+    "Tonica", "Evah Pirazzi", "Evah Pirazzi Gold", "Evah Pirazzi Neo",
+    "Obligato", "Perpetual", "Violino", "Piranito", "Chromcor"
+  ],
+  "Thomastik": [
+    "Dominant", "Dominant Pro", "Vision", "Vision Solo",
+    "Vision Titanium", "Peter Infeld (PI)", "Rondo", "Alphayue", "TI"
+  ],
+  "Larsen": [
+    "Original", "Virtuoso", "Tzigane", "Aurora",
+    "Il Cannone", "Il Cannone Gold", "Il Cannone Silver"
+  ],
+  "Jargar": []
+};
+
+var EINTRAG_ANDERE = "nicht aufgeführt / weiß ich nicht";
+
+/* --- Hilfsfunktionen Sichtbarkeit --- */
+function zeige(id)    { document.getElementById(id).classList.remove("versteckt"); }
+function verstecke(id){ document.getElementById(id).classList.add("versteckt"); }
+
+/* --- Block 2: Hersteller "Andere" --- */
+document.getElementById("hersteller").addEventListener("change", function() {
+  var wert = this.value;
+
+  if (wert === "Andere") {
+    zeige("frage-hersteller-andere");
+  } else {
+    verstecke("frage-hersteller-andere");
+  }
+
+  /* Saitennamen-Liste passend zum Hersteller aufbauen */
+  var sel = document.getElementById("saitenname");
+  sel.innerHTML = "";
+  if (wert === "" ) {
+    sel.innerHTML = '<option value="">– bitte zuerst Hersteller wählen –</option>';
+  } else {
+    var erst = document.createElement("option");
+    erst.value = ""; erst.textContent = "– bitte wählen –";
+    sel.appendChild(erst);
+
+    var liste = SAITEN_NACH_HERSTELLER[wert] || [];
+    liste.forEach(function(name) {
+      var o = document.createElement("option");
+      o.value = name; o.textContent = name;
+      sel.appendChild(o);
+    });
+    var andere = document.createElement("option");
+    andere.value = EINTRAG_ANDERE;
+    andere.textContent = EINTRAG_ANDERE;
+    sel.appendChild(andere);
+  }
+  /* Freitextfeld Saitenname zurücksetzen */
+  verstecke("frage-saitenname-andere");
+});
+
+/* --- Block 2: Saitenname "nicht aufgeführt" --- */
+document.getElementById("saitenname").addEventListener("change", function() {
+  if (this.value === EINTRAG_ANDERE) {
+    zeige("frage-saitenname-andere");
+  } else {
+    verstecke("frage-saitenname-andere");
+  }
+});
+
+/* --- Block 2: gemischte Besaitung --- */
+document.getElementById("gemischt-check").addEventListener("change", function() {
+  if (this.checked) { zeige("frage-gemischt"); }
+  else { verstecke("frage-gemischt"); }
+});
+
+/* --- Block 5: Zufriedenheits-Auswahl steuert den Folgeteil --- */
+var zufriedenRadios = document.getElementsByName("zufrieden");
+for (var i = 0; i < zufriedenRadios.length; i++) {
+  zufriedenRadios[i].addEventListener("change", function() {
+    verstecke("box-ideal");
+    verstecke("box-unzufrieden");
+    verstecke("verbesserung");
+
+    if (this.value === "Ideal für mich") {
+      zeige("box-ideal");
+    } else if (this.value === "Mittel, könnte besser sein") {
+      zeige("verbesserung");
+    } else if (this.value === "Bin unzufrieden") {
+      zeige("box-unzufrieden");
+      zeige("verbesserung");
+    }
+  });
+}
+
+/* --- Block 5: Oberkategorien klappen Unterpunkte auf --- */
+var oberkats = document.getElementsByClassName("oberkat");
+for (var k = 0; k < oberkats.length; k++) {
+  oberkats[k].addEventListener("change", function() {
+    var ziel = this.getAttribute("data-ziel");
+    if (this.checked) { zeige(ziel); }
+    else {
+      verstecke(ziel);
+      /* Unterpunkte abwählen, wenn Oberkategorie abgewählt wird */
+      var unterFelder = document.getElementById(ziel)
+        .querySelectorAll("input[type=checkbox]");
+      unterFelder.forEach(function(f) { f.checked = false; });
+    }
+  });
+}
+
+/* --- Versand an Formspree --- */
+var FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzyvnnv";
+
+/* Hilfsfunktionen zum Auslesen der Felder */
+function angekreuzt(name) {
+  var felder = document.getElementsByName(name);
+  var werte = [];
+  for (var i = 0; i < felder.length; i++) {
+    if (felder[i].checked) { werte.push(felder[i].value); }
+  }
+  return werte;
+}
+function radioWert(name) {
+  var felder = document.getElementsByName(name);
+  for (var i = 0; i < felder.length; i++) {
+    if (felder[i].checked) { return felder[i].value; }
+  }
+  return "";
+}
+function feldWert(id) {
+  return document.getElementById(id).value.trim();
+}
+
+/* Pflichtprüfung. Gibt bei Fehler einen Hinweistext zurück und
+   springt zum betroffenen Feld; bei Erfolg einen leeren String. */
+function pruefeFormular() {
+  function fehler(text, scrollZuId) {
+    if (scrollZuId) {
+      document.getElementById(scrollZuId)
+        .scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    return text;
+  }
+
+  if (feldWert("koennen") === "") {
+    return fehler("Bitte wählen Sie in Abschnitt 1 Ihr "
+      + "Spielniveau aus.", "koennen");
+  }
+  if (feldWert("hersteller") === "") {
+    return fehler("Bitte wählen Sie in Abschnitt 2 den Hersteller "
+      + "Ihrer Saiten aus.", "hersteller");
+  }
+  if (feldWert("hersteller") === "Andere"
+      && feldWert("hersteller-andere") === "") {
+    return fehler("Bitte tragen Sie in Abschnitt 2 ein, welcher "
+      + "Hersteller es ist.", "hersteller-andere");
+  }
+  if (radioWert("bogen") === "") {
+    return fehler("Bitte wählen Sie in Abschnitt 3 das Material "
+      + "Ihres Bogens.", "absenden");
+  }
+  var zuf = radioWert("zufrieden");
+  if (zuf === "") {
+    return fehler("Bitte beantworten Sie in Abschnitt 5, wie "
+      + "zufrieden Sie mit dem Klang sind.", "absenden");
+  }
+  /* Bei "mittel"/"unzufrieden": mindestens ein Verbesserungspunkt */
+  if (zuf === "Mittel, könnte besser sein"
+      || zuf === "Bin unzufrieden") {
+    var verbAnzahl =
+      angekreuzt("verb-klang").length +
+      angekreuzt("verb-ansprache").length +
+      angekreuzt("verb-oberton").length +
+      angekreuzt("verb-volumen").length;
+    if (verbAnzahl === 0) {
+      return fehler("Bitte wählen Sie in Abschnitt 5 mindestens "
+        + "einen Punkt aus, der verbessert werden soll.",
+        "verbesserung");
+    }
+  }
+  if (feldWert("name") === "") {
+    return fehler("Bitte tragen Sie in Abschnitt 6 Ihren Namen "
+      + "ein.", "name");
+  }
+  var email = feldWert("email");
+  /* einfache Plausibilitätsprüfung: etwas@etwas.etwas */
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return fehler("Bitte tragen Sie in Abschnitt 6 eine gültige "
+      + "E-Mail-Adresse ein.", "email");
+  }
+  return "";
+}
+
+/* Alle Angaben zu einem lesbaren Text zusammensetzen */
+function baueZusammenfassung() {
+  var z = [];
+  z.push("=== ANGABEN ZUM SPIELER ===");
+  z.push("Spielniveau: " + feldWert("koennen"));
+  var rahmen = angekreuzt("rahmen");
+  z.push("Spielrahmen: " + (rahmen.length ? rahmen.join(", ")
+    : "keine Angabe"));
+  z.push("");
+
+  z.push("=== AKTUELLE SAITEN ===");
+  var herst = feldWert("hersteller");
+  if (herst === "Andere") {
+    herst = "Andere – " + feldWert("hersteller-andere");
+  }
+  z.push("Hersteller: " + herst);
+  var satz = feldWert("saitenname");
+  if (satz === EINTRAG_ANDERE) {
+    satz = "nicht aufgeführt – " + feldWert("saitenname-andere");
+  }
+  z.push("Saitensatz: " + (satz || "keine Angabe"));
+  if (document.getElementById("gemischt-check").checked) {
+    z.push("Gemischte Besaitung: "
+      + (feldWert("gemischt-text") || "ja, ohne nähere Angabe"));
+  }
+  z.push("");
+
+  z.push("=== BOGEN ===");
+  z.push("Material: " + (radioWert("bogen") || "keine Angabe"));
+  if (feldWert("bogen-text") !== "") {
+    z.push("Zusätzlich: " + feldWert("bogen-text"));
+  }
+  z.push("");
+
+  z.push("=== KLANG JETZT ===");
+  var klang = angekreuzt("klang-jetzt");
+  z.push(klang.length ? klang.join(", ") : "keine Angabe");
+  z.push("");
+
+  z.push("=== WUNSCH ===");
+  z.push("Zufriedenheit: " + radioWert("zufrieden"));
+  var verb = []
+    .concat(angekreuzt("verb-klang"))
+    .concat(angekreuzt("verb-ansprache"))
+    .concat(angekreuzt("verb-oberton"))
+    .concat(angekreuzt("verb-volumen"));
+  if (verb.length) {
+    z.push("Gewünschte Verbesserungen: " + verb.join(", "));
+  }
+  if (feldWert("verb-sonstiges") !== "") {
+    z.push("Sonstiges: " + feldWert("verb-sonstiges"));
+  }
+  z.push("");
+
+  z.push("=== KONTAKT ===");
+  z.push("Name: " + feldWert("name"));
+  z.push("E-Mail: " + feldWert("email"));
+  if (feldWert("nachricht") !== "") {
+    z.push("Nachricht: " + feldWert("nachricht"));
+  }
+  return z.join("\n");
+}
+
+/* --- Absenden --- */
+document.getElementById("absenden").addEventListener("click", function() {
+  var hinweis = document.getElementById("pflicht-hinweis");
+  var knopf = this;
+
+  /* 1. Pflichtprüfung */
+  var fehlertext = pruefeFormular();
+  if (fehlertext !== "") {
+    hinweis.style.color = "#a05a3a";
+    hinweis.textContent = fehlertext;
+    hinweis.style.display = "block";
+    return;
+  }
+
+  /* 2. Versand */
+  hinweis.style.display = "none";
+  knopf.disabled = true;
+  knopf.textContent = "Wird gesendet …";
+
+  var daten = {
+    betreff: "Neue Saitenberater-Anfrage",
+    name: feldWert("name"),
+    email: feldWert("email"),
+    zusammenfassung: baueZusammenfassung()
+  };
+
+  fetch(FORMSPREE_ENDPOINT, {
+    method: "POST",
+    headers: { "Accept": "application/json",
+               "Content-Type": "application/json" },
+    body: JSON.stringify(daten)
+  }).then(function(antwort) {
+    if (antwort.ok) {
+      /* Erfolg: Formular durch Dankesmeldung ersetzen */
+      document.querySelector(".wrap").innerHTML =
+        '<h1>Vielen Dank!</h1>' +
+        '<p class="intro">Ihre Anfrage ist bei uns eingegangen. ' +
+        'Wir werten Ihre Angaben in Ruhe aus und melden uns ' +
+        'persönlich mit einer Saitenempfehlung bei Ihnen.</p>';
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      throw new Error("Server-Antwort nicht ok");
+    }
+  }).catch(function() {
+    /* Fehler: Knopf zurücksetzen, Hinweis zeigen */
+    knopf.disabled = false;
+    knopf.textContent = "Anfrage absenden";
+    hinweis.style.color = "#a05a3a";
+    hinweis.textContent =
+      "Das Absenden hat leider nicht geklappt. Bitte versuchen " +
+      "Sie es noch einmal, oder schreiben Sie uns direkt an " +
+      "info@streicherwelt.de.";
+    hinweis.style.display = "block";
+  });
+});
+
+/* --- Versionsanzeige --- */
+document.getElementById("datenstand").textContent = APP_VERSION;
+
+</script>
+</body>
+</html>
