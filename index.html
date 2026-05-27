@@ -386,7 +386,7 @@
    SAITENBERATER – Formularlogik
    =================================================================== */
 
-var APP_VERSION = "Saitenberater Stand 2026-05-27 (mit Versand, mobil)";
+var APP_VERSION = "Saitenberater Stand 2026-05-27 (auto-Hoehe)";
 
 /* --- Saitensätze je Hersteller ---
    Gespeist aus der Saitenfinder-Datenbank, für den Berater auf die
@@ -704,6 +704,46 @@ document.getElementById("absenden").addEventListener("click", function() {
 
 /* --- Versionsanzeige --- */
 document.getElementById("datenstand").textContent = APP_VERSION;
+
+/* --- Höhe an die einbettende Shopify-Seite melden ---
+   Die App misst ihre eigene Höhe und schickt sie per
+   postMessage nach außen. Der Einbettungscode in Shopify
+   stellt den iframe dann genau auf diese Höhe ein.
+   Gemeldet wird: einmal beim Laden, bei jeder Größen-
+   änderung des Fensters, und immer wenn sich der Inhalt
+   ändert (z. B. wenn ein Bereich auf- oder zuklappt). */
+(function () {
+  function meldeHoehe() {
+    var hoehe = document.body.scrollHeight;
+    /* "*" als Ziel: die App weiß nicht, auf welcher Domain
+       sie eingebettet ist. Es werden nur Höhenzahlen
+       gesendet, keine sensiblen Daten. */
+    try {
+      window.parent.postMessage(
+        { saitenberaterHoehe: hoehe }, "*"
+      );
+    } catch (e) { /* außerhalb eines iframe: ignorieren */ }
+  }
+
+  /* beim Laden, etwas verzögert, damit alles gerendert ist */
+  window.addEventListener("load", function () {
+    meldeHoehe();
+    setTimeout(meldeHoehe, 300);
+  });
+  /* bei Fenster-Größenänderung */
+  window.addEventListener("resize", meldeHoehe);
+  /* bei jeder Inhaltsänderung der Seite (Auf-/Zuklappen) */
+  if (typeof MutationObserver !== "undefined") {
+    var beobachter = new MutationObserver(meldeHoehe);
+    beobachter.observe(document.body, {
+      childList: true, subtree: true, attributes: true
+    });
+  }
+  /* zusätzlich bei jedem Klick, als einfache Absicherung */
+  document.addEventListener("click", function () {
+    setTimeout(meldeHoehe, 100);
+  });
+})();
 
 </script>
 </body>
