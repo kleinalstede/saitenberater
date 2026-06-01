@@ -173,6 +173,17 @@
     <h2>2. Ihre aktuellen Saiten</h2>
     <p class="hint">Welche Saiten spielen Sie derzeit?</p>
 
+    <div class="hinweisbox" style="margin-top:0;">
+      Sie sind unsicher oder wissen es nicht?
+      <a href="https://streicherwelt.de/pages/saitenfinder-violine"
+         target="_blank" rel="noopener"
+         style="color:#936a26; font-weight:600;">
+        Hier geht's zum Saitenfinder
+      </a> –
+      damit lassen sich Ihre aktuellen Saiten anhand der
+      Wicklungsfarben bestimmen.
+    </div>
+
     <div class="frage">
       <label class="feldname" for="hersteller">Hersteller</label>
       <select id="hersteller">
@@ -180,6 +191,7 @@
         <option value="Pirastro">Pirastro</option>
         <option value="Thomastik">Thomastik</option>
         <option value="Larsen">Larsen</option>
+        <option value="D'Addario">D'Addario</option>
         <option value="Jargar">Jargar</option>
         <option value="Andere">Andere</option>
       </select>
@@ -386,7 +398,7 @@
    SAITENBERATER – Formularlogik
    =================================================================== */
 
-var APP_VERSION = "Saitenberater Stand 2026-05-27 (auto-Hoehe)";
+var APP_VERSION = "Saitenberater Stand 2026-05-27 (+Saitenfinder-Verweis)";
 
 /* --- Saitensätze je Hersteller ---
    Gespeist aus der Saitenfinder-Datenbank, für den Berater auf die
@@ -405,6 +417,9 @@ var SAITEN_NACH_HERSTELLER = {
   "Larsen": [
     "Original", "Virtuoso", "Tzigane", "Aurora",
     "Il Cannone", "Il Cannone Gold", "Il Cannone Silver"
+  ],
+  "D'Addario": [
+    "Prelude", "Helicore", "Zyex"
   ],
   "Jargar": []
 };
